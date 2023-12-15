@@ -1,26 +1,8 @@
 #!/bin/bash
+#sudo apt-get install bc
+binary_number="1101"
 
-# Take input as binary number
-echo “Enter Binary Number: “
-read n
+decimal_number=$(echo "ibase=2; $binary_number" | bc)
 
-# Validate input
-if [[ ! “$n” =~ ^[01]+$ ]]; then
-echo “Error: Invalid binary number.”
-exit 1
-fi
-
-# Initialize variables
-i=0
-num=0
-
-# Convert binary to decimal
-while [ $n -ne 0 ]; do
-digit=$((n % 10))
-num=$((num + digit * 2**i))
-n=$((n / 10))
-let “i++”
-done
-
-# Print the result
-echo “Resultant Decimal Number: $num”
+echo "Binary: $binary_number"
+echo "Decimal: $decimal_number"

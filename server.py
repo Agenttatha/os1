@@ -1,23 +1,36 @@
+
 import socket
 
-def main():
-    host = '127.0.0.1'  # Server IP address
-    port = 8080         # Server port
+MAX = 80
+PORT = 8080
 
-    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client_socket.connect((host, port))
-
+def func(conn):
     while True:
-        message = input("To server: ")
-        client_socket.send(message.encode('utf-8'))
-
-        if message.lower() == 'exit':
+        data = conn.recv(MAX).decode('utf-8')
+        print(f"From client: {data}\t To client: ", end='')
+        message = input()
+        conn.send(message.encode('utf-8'))
+        if message == "exit":
+            print("Server Exit...")
             break
 
-        data = client_socket.recv(1024).decode('utf-8')
-        print(f"From server: {data}")
+def main():
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    print("Socket successfully created..")
 
-    client_socket.close()
+    s.bind(('', PORT))
+    print("Socket successfully binded..")
+
+    s.listen(5)
+    print("Server listening..")
+
+    conn, addr = s.accept()
+    print(f"Server accepted the client {addr}")
+
+    func(conn)
+    conn.close()
 
 if __name__ == "__main__":
     main()
+
+
